@@ -1,0 +1,5 @@
+{
+  "tasks": {
+    "dev": "ENV=development deno run --watch --import-map=import_map.json --allow-net --allow-read --allow-env --allow-sys src/index.ts"
+  }
+}
