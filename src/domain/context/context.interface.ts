@@ -1,5 +1,5 @@
-import userModel from "@/domain/user/model/user.model.ts";
+import { UserRepository } from "@/domain/user/repository/user.repository.ts";
 
 export interface Context {
-  userModel: typeof userModel;
+  userRepository: UserRepository;
 }

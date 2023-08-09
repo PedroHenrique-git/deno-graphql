@@ -1,11 +1,11 @@
 // deno-lint-ignore-file require-await
 import { Context } from "@/domain/context/context.interface.ts";
-import userModel from "@/domain/user/model/user.model.ts";
+import userRepositoryNosql from "@/domain/user/repository/user.repository.nosql.ts";
 import { resolvers } from "@/presentation/resolvers/index.ts";
 import { typeDefs } from "@/presentation/typedefs/index.ts";
 import { load } from "https://deno.land/std@0.197.0/dotenv/mod.ts";
 import { startStandaloneServer } from "npm:@apollo/server@4.1/standalone";
-import { ApolloServer } from "npm:@apollo/server@^4.1";
+import { ApolloServer } from "npm:@apollo/server@^4.1.1";
 import mongoose from "npm:mongoose@^6.7";
 
 const env = await load();
@@ -23,7 +23,7 @@ const server = new ApolloServer<Context>({
 const { url } = await startStandaloneServer(server, {
   listen: { port: PORT },
   context: async () => {
-    return { userModel };
+    return { userRepository: userRepositoryNosql };
   },
 });
 
