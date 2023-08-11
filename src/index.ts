@@ -13,18 +13,25 @@ const env = await load();
 const PORT = env["PORT"] ?? 8000;
 const DB_URL = env["DB_URL"] ?? "";
 
-await mongoose.connect(DB_URL);
+async function startServer() {
+  await mongoose.connect(DB_URL);
 
-const server = new ApolloServer<Context>({
-  typeDefs,
-  resolvers,
+  const server = new ApolloServer<Context>({
+    typeDefs,
+    resolvers,
+  });
+
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: PORT },
+    context: async () => {
+      return { userRepository: userRepositoryNosql };
+    },
+  });
+
+  console.log(`Server running on: ${url}`);
+}
+
+startServer().catch((err) => {
+  console.error(err);
+  Deno.exit(1);
 });
-
-const { url } = await startStandaloneServer(server, {
-  listen: { port: PORT },
-  context: async () => {
-    return { userRepository: userRepositoryNosql };
-  },
-});
-
-console.log(`Server running on: ${url}`);
